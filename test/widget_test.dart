@@ -1,30 +1,25 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:bottom_sheet_golden_test_failure/main.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:golden_toolkit/golden_toolkit.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('MyHomePage golden tests', () {
+    const myHomePage = MyHomePage();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    testGoldens('screen renders correctly', (tester) async {
+      await tester.pumpWidgetBuilder(myHomePage);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      await multiScreenGolden(tester, 'my_home_page');
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    testGoldens('shows bottom sheet', (tester) async {
+      await tester.pumpWidgetBuilder(myHomePage);
+
+      await tester.tap(find.text('Open BottomSheet'));
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      await multiScreenGolden(tester, 'my_home_page_bottom_sheet');
+    });
   });
 }
