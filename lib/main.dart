@@ -66,75 +66,10 @@ class _MyHomePageState extends State<MyHomePage> {
       initHeight: 0.5,
       maxHeight: 0.5,
       context: context,
-      builder: (context, controller, offset) {
-        return _BottomSheet(
-          bottomSheetOffset: offset,
-        );
+      builder: (context, _, __) {
+        return Container(color: Colors.blue);
       },
       anchors: [0, 0.5],
-    );
-  }
-}
-
-class _BottomSheet extends StatelessWidget {
-  final double bottomSheetOffset;
-
-  const _BottomSheet({
-    required this.bottomSheetOffset,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Material(
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Color(0xFFFFFFFF),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-              topRight: Radius.circular(16),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'position $bottomSheetOffset',
-                style: Theme.of(context).textTheme.headline6,
-              ),
-              Column(
-                children: _children,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-List<Widget> _children = [
-  const _TestContainer(color: Color(0xEEFFFF00)),
-  const _TestContainer(color: Color(0xDD99FF00)),
-];
-
-class _TestContainer extends StatelessWidget {
-  final Color color;
-
-  const _TestContainer({
-    required this.color,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: 100,
-        color: color,
-      ),
     );
   }
 }
