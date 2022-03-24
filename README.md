@@ -30,7 +30,7 @@ Seems like `showFlexibleBottomSheet`'s `builer` requires scrollable `Widget` wit
 ## Suggestions
 
 1. Document such case.
-2. Allow to pass non-scrollable widget (w/o `ScrollController`) `showFlexibleBottomSheet`'s `builer`.
+2. Allow to pass non-scrollable widget (w/o `ScrollController`) into `showFlexibleBottomSheet`'s `builer`.
 
 ## Stack trace
 
