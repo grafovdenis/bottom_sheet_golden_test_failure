@@ -2,9 +2,13 @@
 
 Project which demostrates [showModalBottomSheet](https://api.flutter.dev/flutter/material/showModalBottomSheet.html) with [DraggableScrollableSheet](https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html) failure during golden tests (using [golden_toolkit](https://pub.dev/packages/golden_toolkit)).
 
-## Usage demo
+## Description
 
 Let's say, we'd like to display draggable bottom sheet, which height is 200. It's snaps are 0 (closed) and 1 (fully opened).
+
+When we wrote such code and run on any device - it works fine. But when we try to write golden tests for such case, it fails.
+
+## Source code
 
 ```dart
     showModalBottomSheet<void>(
