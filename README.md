@@ -1,6 +1,6 @@
 # bottom_sheet_golden_test_failure
 
-Project which demostrates [showModalBottomSheet](https://api.flutter.dev/flutter/material/showModalBottomSheet.html) failure during golden tests (using [golden_toolkit](https://pub.dev/packages/golden_toolkit)).
+Project which demostrates [showModalBottomSheet](https://api.flutter.dev/flutter/material/showModalBottomSheet.html) with [DraggableScrollableSheet](https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html) failure during golden tests (using [golden_toolkit](https://pub.dev/packages/golden_toolkit)).
 
 ## Usage demo
 
@@ -17,7 +17,7 @@ Let's say, we'd like to display draggable bottom sheet, which height is 200. It'
           minChildSize: 0.0,
           initialChildSize: 1.0,
           snap: true,
-          snapSizes: const [0.0, 1],
+          snapSizes: const [0.0, 1.0],
           builder: (context, scrollController) {
             return Container(
               color: Colors.blue,
@@ -36,7 +36,7 @@ Run `flutter test`.
 
 ## Failure cause
 
-Seems like `DraggableScrollableSheet`'s `builer` requires scrollable `Widget` with `controller` passed into constructor when it's displayed by `showModalBottomSheet`.
+Seems like [DraggableScrollableSheet](https://api.flutter.dev/flutter/widgets/DraggableScrollableSheet-class.html)'s `builer` requires scrollable `Widget` with `controller` passed into constructor when it's displayed by [showModalBottomSheet](https://api.flutter.dev/flutter/material/showModalBottomSheet.html).
 
 ## How to fix
 
@@ -51,9 +51,9 @@ Wrap sheet's content into scrollable widget with `NeverScrollableScrollPhysics`.
       builder: (_) {
         return DraggableScrollableSheet(
           minChildSize: 0.0,
-          initialChildSize: 1,
+          initialChildSize: 1.0,
           snap: true,
-          snapSizes: const [0.0, 1],
+          snapSizes: const [0.0, 1.0],
           builder: (context, scrollController) {
             return CustomScrollView(
               controller: scrollController,
