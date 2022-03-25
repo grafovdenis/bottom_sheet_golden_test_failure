@@ -1,19 +1,30 @@
 # bottom_sheet_golden_test_failure
 
-Project which demostrates [bottom_sheet](https://github.com/surfstudio/flutter-bottom-sheet) failure during golden tests.
+Project which demostrates [showModalBottomSheet](https://api.flutter.dev/flutter/material/showModalBottomSheet.html) failure during golden tests (using [golden_toolkit](https://pub.dev/packages/golden_toolkit)).
 
 ## Usage demo
 
+Let's say, we'd like to display draggable bottom sheet, which height is 200. It's snaps are 0 (closed) and 1 (fully opened).
+
 ```dart
-    showFlexibleBottomSheet<void>(
-      minHeight: 0,
-      initHeight: 0.5,
-      maxHeight: 0.5,
+    showModalBottomSheet<void>(
       context: context,
-      builder: (context, _, __) {
-        return Container(color: Colors.blue);
+      constraints: const BoxConstraints(
+        maxHeight: 200,
+      ),
+      builder: (_) {
+        return DraggableScrollableSheet(
+          minChildSize: 0.0,
+          initialChildSize: 1.0,
+          snap: true,
+          snapSizes: const [0.0, 1],
+          builder: (context, scrollController) {
+            return Container(
+              color: Colors.blue,
+            );
+          },
+        );
       },
-      anchors: [0, 0.5],
     );
 ```
 
@@ -25,16 +36,46 @@ Run `flutter test`.
 
 ## Failure cause
 
-Seems like `showFlexibleBottomSheet`'s `builer` requires scrollable `Widget` with `controller` passed into constructor.
+Seems like `DraggableScrollableSheet`'s `builer` requires scrollable `Widget` with `controller` passed into constructor when it's displayed by `showModalBottomSheet`.
 
-## Suggestions
+## How to fix
 
-1. Document such case.
-2. Allow to pass non-scrollable widget (w/o `ScrollController`) into `showFlexibleBottomSheet`'s `builer`.
+Wrap sheet's content into scrollable widget with `NeverScrollableScrollPhysics`.
+
+```dart
+    showModalBottomSheet<void>(
+      context: context,
+      constraints: const BoxConstraints(
+        maxHeight: 200,
+      ),
+      builder: (_) {
+        return DraggableScrollableSheet(
+          minChildSize: 0.0,
+          initialChildSize: 1,
+          snap: true,
+          snapSizes: const [0.0, 1],
+          builder: (context, scrollController) {
+            return CustomScrollView(
+              controller: scrollController,
+              physics: const NeverScrollableScrollPhysics(),
+              slivers: [
+                SliverFillRemaining(
+                  child: Container(
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+```
 
 ## Stack trace
 
 ``` bash
+00:03 +1: MyHomePage golden tests shows bottom sheet                                                      
 ══╡ EXCEPTION CAUGHT BY SCHEDULER LIBRARY ╞═════════════════════════════════════════════════════════
 The following assertion was thrown during a scheduler callback:
 ScrollController not attached to any scroll views.
@@ -102,9 +143,9 @@ The following message was thrown:
 Multiple exceptions (2) were detected during the running of the current test, and at least one was
 unexpected.
 ════════════════════════════════════════════════════════════════════════════════════════════════════
-00:04 +1 -1: MyHomePage golden tests shows bottom sheet [E]                                  
+00:03 +1 -1: MyHomePage golden tests shows bottom sheet [E]                                               
   Test failed. See exception logs above.
   The test description was: shows bottom sheet
   
-00:04 +1 -1: Some tests failed.
+00:04 +2 -1: Some tests failed.
 ```

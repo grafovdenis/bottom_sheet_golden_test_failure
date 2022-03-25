@@ -21,5 +21,15 @@ void main() {
 
       await multiScreenGolden(tester, 'my_home_page_bottom_sheet');
     });
+
+    testGoldens('shows fixed bottom sheet', (tester) async {
+      await tester.pumpWidgetBuilder(myHomePage);
+
+      await tester.tap(find.text('Open fixed BottomSheet'));
+
+      await tester.pumpAndSettle(const Duration(seconds: 1));
+
+      await multiScreenGolden(tester, 'my_home_page_bottom_sheet_fixed');
+    });
   });
 }
