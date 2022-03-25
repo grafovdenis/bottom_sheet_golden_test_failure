@@ -44,7 +44,7 @@ Seems like [DraggableScrollableSheet](https://api.flutter.dev/flutter/widgets/Dr
 
 ## How to fix
 
-Wrap sheet's content into scrollable widget with `NeverScrollableScrollPhysics`.
+Wrap sheet's content into scrollable widget with `NeverScrollableScrollPhysics` and pass `scrollController` into such widget.
 
 ```dart
     showModalBottomSheet<void>(
